@@ -8,10 +8,8 @@ class Controller:
         # the model, which implements the logic of the program and holds the data
         self._model = model
 
-    def handle_hello(self, e):
-        name = self._view.txt_name.value
-        if name is None or name == "":
-            self._view.create_alert("Inserire il nome")
-            return
-        self._view.txt_result.controls.append(ft.Text(f"Hello, {name}!"))
+    def fillDdYear(self):
+        date = self._model.fillDdYear()
+        for d in date:
+            self._view._ddYear.options.append(ft.dropdown.Option(d))
         self._view.update_page()
