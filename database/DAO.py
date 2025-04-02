@@ -8,12 +8,11 @@ class DAO():
     def getAllYear():
         cnx = DBConnect.get_connection()
         cursor = cnx.cursor()
-        query = "select Year(Date) from go_daily_sales"
+        query = "select distinct Year(Date) from go_daily_sales"
         cursor.execute(query)
         listaDate = []
         for row in cursor.fetchall():
-            if row[0] not in listaDate:
-                listaDate.append(row[0])
+            listaDate.append(row[0])
         cursor.close()
         cnx.close()
         return listaDate
@@ -32,7 +31,8 @@ class DAO():
         cnx.close()
         return listaProdotti
 
-    def getAllRetailers(self):
+    @staticmethod
+    def getAllRetailers():
         cnx = DBConnect.get_connection()
         cursor = cnx.cursor()
         query = "select * from go_retailers"
@@ -45,21 +45,41 @@ class DAO():
         cnx.close()
         return listaRetailers
 
-    def getTop(self, anno, brand, retailer):
+
+    @staticmethod
+    def getTop(anno, brand, retailer):
         cnx = DBConnect.get_connection()
         cursor = cnx.cursor()
-        query = "select * from go_daily_sales gds, go_products gp where gds.Product_number = gp.Product_number"
-        if anno != "Nessun filtro":
+        query = "select gds.Retailer_code, gds.Quantity, gds.Unit_sale_price, gp.Product_brand, gds.Date from go_daily_sales gds, go_products gp where gds.Product_number = gp.Product_number"
+        if anno != "Nessun filtro" and anno is not None:
             query += f" and Year(Date) = {anno}"
-        if brand != "Nessun filtro":
-            query += f" and Product_brand = {brand}"
-        if retailer != "Nessun filtro":
+        if brand != "Nessun filtro" and brand is not None:
+            query += f" and gp.Product_brand = '{brand}'"
+        if retailer != "Nessun filtro" and retailer is not None:
             query += f" and Retailer_code = {retailer}"
         cursor.execute(query)
         listaTop = []
         for row in cursor.fetchall():
-            listaTop.append(row[0])
-            listaTop.__hash__()
+            listaTop.append((row[0], row[1]*row[2], row[3], row[4]))
         cursor.close()
         cnx.close()
         return listaTop
+
+    @staticmethod
+    def analizza(anno, brand, retailer):
+        cnx = DBConnect.get_connection()
+        cursor = cnx.cursor()
+        query = "select sum(gds.Quantity*gds.Unit_sale_price), count(*), count(distinct(gds.Retailer_code)), count(distinct (gp.Product)) from go_daily_sales gds, go_products gp where gds.Product_number = gp.Product_number"
+        if anno != "Nessun filtro" and anno is not None:
+            query += f" and Year(Date) = {anno}"
+        if brand != "Nessun filtro" and brand is not None:
+            query += f" and gp.Product_brand = '{brand}'"
+        if retailer != "Nessun filtro" and retailer is not None:
+            query += f" and Retailer_code = {retailer}"
+        cursor.execute(query)
+        listaDati = []
+        for row in cursor.fetchall():
+            listaDati.append((row[0], row[1], row[2], row[3]))
+        cursor.close()
+        cnx.close()
+        return listaDati

@@ -5,6 +5,7 @@ class View(ft.UserControl):
     def __init__(self, page: ft.Page):
         super().__init__()
         # page stuff
+        self._btnAnalizza = None
         self._btnTop = None
         self._ddRetailers = None
         self._ddProduct = None
@@ -34,7 +35,8 @@ class View(ft.UserControl):
         row1 = ft.Row([self._ddYear, self._ddProduct, self._ddRetailers], alignment=ft.MainAxisAlignment.CENTER)
         
         self._btnTop = ft.ElevatedButton(text="Top vendite", on_click=self._controller.handleTop)
-        row2 = ft.Row([self._btnTop], alignment=ft.MainAxisAlignment.CENTER)
+        self._btnAnalizza = ft.ElevatedButton(text="Analizza vendite", on_click=self._controller.handleAnalizza)
+        row2 = ft.Row([self._btnTop, self._btnAnalizza], alignment=ft.MainAxisAlignment.CENTER)
         self._page.add(row1, row2)
 
         # button for the "hello" reply
