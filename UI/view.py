@@ -5,6 +5,9 @@ class View(ft.UserControl):
     def __init__(self, page: ft.Page):
         super().__init__()
         # page stuff
+        self._btnTop = None
+        self._ddRetailers = None
+        self._ddProduct = None
         self._ddYear = None
         self._page = page
         self._page.title = "Template application using MVC and DAO"
@@ -15,7 +18,6 @@ class View(ft.UserControl):
         # graphical elements
         self._title = None
         self.txt_result = None
-        self.txt_container = None
 
     def load_interface(self):
         # title
@@ -25,8 +27,15 @@ class View(ft.UserControl):
         #ROW with some controls
         self._ddYear = ft.Dropdown(label="Anno")
         self._controller.fillDdYear()
-        row1 = ft.Row([self._ddYear])
-        self._page.add(row1)
+        self._ddProduct = ft.Dropdown(label="Brand")
+        self._controller.fillDdProduct()
+        self._ddRetailers = ft.Dropdown(label="Retailers")
+        self._controller.fillDdRetailers()
+        row1 = ft.Row([self._ddYear, self._ddProduct, self._ddRetailers], alignment=ft.MainAxisAlignment.CENTER)
+        
+        self._btnTop = ft.ElevatedButton(text="Top vendite", on_click=self._controller.handleTop)
+        row2 = ft.Row([self._btnTop], alignment=ft.MainAxisAlignment.CENTER)
+        self._page.add(row1, row2)
 
         # button for the "hello" reply
 
