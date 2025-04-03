@@ -45,7 +45,8 @@ class Controller:
             self._view.update_page()
             return
         for i in range(0, min(5, len(top))):
-            self._view.txt_result.controls.append(ft.Text(f"Data: {top[i][3]} Retailer: {top[i][0]} Brand: {top[i][2]} Ricavo: {top[i][1]}"))
+            self._view.txt_result.controls.append(ft.Text())
+            self._view.txt_result.controls.append(ft.Text(f"Data: {top[i][3]}  Retailer: {top[i][0]}  Brand: {top[i][2]}  Ricavo: {top[i][1]}", size=15))
         self._view.update_page()
 
     def handleAnalizza(self, e):
@@ -60,11 +61,11 @@ class Controller:
         else:
             dati = self._model.analizza(anno, brand, retailer.codice)
         self._view.txt_result.controls.clear()
-        self._view.txt_result.controls.append(ft.Text("Statistiche vendite"))
+        self._view.txt_result.controls.append(ft.Text("Statistiche vendite", size=18, weight=ft.FontWeight.BOLD))
         self._view.txt_result.controls.append(ft.Text(f"Giro d'affari: {dati[0][0]}"
                                                       f"\nNumero vendite: {dati[0][1]}"
                                                       f"\nNumero retailers coinvolti: {dati[0][2]}"
-                                                      f"\nNumero prodotti coinvolti: {dati[0][3]}"))
+                                                      f"\nNumero prodotti coinvolti: {dati[0][3]}", size=15))
         self._view.update_page()
 
     def readRetailer(self, e):
