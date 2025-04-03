@@ -57,6 +57,7 @@ class DAO():
             query += f" and gp.Product_brand = '{brand}'"
         if retailer != "Nessun filtro" and retailer is not None:
             query += f" and Retailer_code = {retailer}"
+        query += f" order by gds.Quantity*gds.Unit_sale_price desc limit 5"
         cursor.execute(query)
         listaTop = []
         for row in cursor.fetchall():

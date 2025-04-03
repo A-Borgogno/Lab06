@@ -15,7 +15,7 @@ class Model:
         return DAO.getAllRetailers()
 
     def searchTop(self, anno, brand, retailer):
-        return sorted(DAO.getTop(anno, brand, retailer), key=lambda v:v[1], reverse=True)
+        return DAO.getTop(anno, brand, retailer)
 
     def analizza(self, anno, brand, retailer):
         return DAO.analizza(anno, brand, retailer)
